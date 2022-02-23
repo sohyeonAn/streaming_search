@@ -1,5 +1,13 @@
 import styled from "styled-components";
+import { useState } from "react";
 import axios from "axios";
+import Modal from "./common/Modal";
+import { API_PARAMS, IMAGE_PATH } from "../constants/API";
+
+const color = {
+  tv: "#D5F5E3",
+  movie: "#FCF3CF",
+};
 
 const ItemBlock = styled.div`
   display: flex;
@@ -42,41 +50,92 @@ const ItemBlock = styled.div`
     }
   }
 
-  span {
+  .info_txt {
     flex: 1;
-    font-size: 1.2rem;
+
+    .title {
+      font-size: 1.2rem;
+      display: block;
+    }
+    .media_type {
+      text-align: center;
+      min-width: 3rem;
+      display: inline-block;
+      font-size: 1rem;
+      padding: 0.3rem 0.5rem;
+      border-radius: 10%;
+      background-color: ${(props) => props.color};
+    }
   }
 `;
 function Item(info) {
   const { title, thumbnail, id, media_type } = info;
+  const [modal, setModal] = useState(false);
+  const [providers, setProviders] = useState({});
+  const [networks, setNetworks] = useState([]);
+
   const params = {
-    api_key: "d277d1f5bbb9f2ba2a5bd7ca9ba09c4d",
     append_to_response: "watch/providers",
-    language: "ko",
+    ...API_PARAMS,
   };
 
   const onClick = async () => {
-    const response = await axios.get(
-      `https://api.themoviedb.org/3/${media_type}/${id}?`,
-      {
-        params,
+    setModal(true);
+    try {
+      const response = await axios.get(
+        `https://api.themoviedb.org/3/${media_type}/${id}?`,
+        {
+          params,
+        }
+      );
+
+      if (!response) {
+        return;
       }
-    );
-    console.log("스트리밍", response.data["watch/providers"]);
-    console.log("방송사", response.data.networks);
+      const newProviders = response.data["watch/providers"].results["KR"];
+      setProviders(newProviders);
+      const newNetworks = response.data.networks;
+      setNetworks(newNetworks);
+
+      console.log("스트리밍", response.data["watch/providers"].results.KR);
+      console.log("방송사", response.data.networks);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const onCancel = () => {
+    setModal(false);
   };
   return (
-    <ItemBlock onClick={onClick}>
-      {thumbnail && (
+    <>
+      <ItemBlock
+        onClick={onClick}
+        color={media_type === "tv" ? color.tv : color.movie}
+      >
         <div className="imgContainer">
-          <img
-            src={`https://image.tmdb.org/t/p/original/${thumbnail}`}
-            alt="포스터사진"
-          />
+          {thumbnail && (
+            <img src={`${IMAGE_PATH}/${thumbnail}`} alt="포스터사진" />
+          )}
         </div>
-      )}
-      <span>{title}</span>
-    </ItemBlock>
+        <div className="info_txt">
+          <span className="media_type">{media_type}</span>
+          <span className="title">{title}</span>
+        </div>
+      </ItemBlock>
+      <Modal
+        visible={modal}
+        title={title}
+        buy={providers?.hasOwnProperty("buy") ? providers.buy : null}
+        flatrate={
+          providers?.hasOwnProperty("flatrate") ? providers.flatrate : null
+        }
+        rent={providers?.hasOwnProperty("rent") ? providers.rent : null}
+        networks={networks}
+        onCancel={onCancel}
+        thumbnail={thumbnail}
+      />
+    </>
   );
 }
 
