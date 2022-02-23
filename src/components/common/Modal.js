@@ -43,7 +43,7 @@ const ModalBlock = styled.div`
   }
   .info {
     flex: 1;
-    padding: 1rem 0;
+    padding: 1rem 0 0;
     min-width: 10rem;
     h2 {
       margin: 0;
@@ -55,6 +55,25 @@ const ModalBlock = styled.div`
       padding: 0 0.3rem;
     }
   }
+
+  @media screen and (max-width: 430px) {
+    padding: 1rem;
+    width: 15rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    .info {
+      width: 100%;
+
+      h2 {
+        font-size: 1rem;
+      }
+
+      .network_name {
+        font-size: 0.8rem;
+      }
+    }
+  }
 `;
 const ImageContainerBlock = styled(ImageContainer)`
   width: 18rem;
@@ -62,6 +81,12 @@ const ImageContainerBlock = styled(ImageContainer)`
   padding-top: 27rem;
   img {
     border-radius: 10px;
+  }
+
+  @media screen and (max-width: 430px) {
+    width: 9rem;
+    height: 12rem;
+    padding-top: 12rem;
   }
 `;
 
@@ -82,6 +107,12 @@ const ProviderListBlock = styled.div`
     padding-bottom: 0.3rem;
     border-bottom: 1px solid gainsboro;
   }
+
+  @media screen and (max-width: 430px) {
+    .method {
+      font-size: 0.8rem;
+    }
+  }
 `;
 
 const ProviderItemBlock = styled.div`
@@ -99,6 +130,13 @@ const ProviderItemBlock = styled.div`
     font-size: 0.8rem;
     text-align: center;
   }
+
+  @media screen and (max-width: 430px) {
+    img {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
 `;
 
 const Modal = ({
@@ -113,7 +151,7 @@ const Modal = ({
 }) => {
   if (!visible) return null;
   return (
-    <Fullscreen>
+    <Fullscreen onClick={onCancel}>
       <ModalBlock>
         {thumbnail && (
           <ImageContainerBlock>
