@@ -6,6 +6,7 @@ const HeaderBlock = styled.div`
   position: fixed;
   width: 100%;
   background-color: peachpuff;
+  z-index: 50;
 `;
 
 const Wrapper = styled(Responsive)`

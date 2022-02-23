@@ -7,7 +7,7 @@ import Item from "./Item";
 const ItemListBlock = styled(Responsive)`
   padding-top: 1.5rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9rem, 20%));
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
   gap: 1rem;
   row-gap: 2rem;
 `;
@@ -18,53 +18,43 @@ function ItemList({ searchInput }) {
     language: "ko",
   };
 
-  const [movieLoading, movieResponse, movieError] = usePromise(() => {
-    return axios.get("https://api.themoviedb.org/3/search/movie?", {
+  const [loading, response, error] = usePromise(() => {
+    return axios.get("https://api.themoviedb.org/3/search/multi?", {
       params,
     });
   }, [searchInput]);
-  const [tvLoading, tvResponse, tvError] = usePromise(() => {
-    return axios.get("https://api.themoviedb.org/3/search/tv?", { params });
-  }, [searchInput]);
 
-  if (tvLoading || movieLoading) {
+  if (loading) {
     return <ItemListBlock>불러오는 중...</ItemListBlock>;
   }
 
-  if (!tvResponse && !movieResponse) {
+  if (!response) {
     return null;
   }
 
-  if (tvError || movieError) {
+  if (error) {
     return <ItemListBlock>에러 발생!</ItemListBlock>;
   }
 
+  const { results } = response.data;
   return (
     <>
       <ItemListBlock>
-        {tvResponse &&
-          tvResponse.data.results.map((item) => {
-            return (
-              <Item
-                key={item.id}
-                id={item.id}
-                isMovie={false}
-                title={item.name}
-                thumbnail={item.poster_path}
-              />
-            );
-          })}
-        {movieResponse &&
-          movieResponse.data.results.map((item) => {
-            return (
-              <Item
-                key={item.id}
-                id={item.id}
-                isMovie={true}
-                title={item.title}
-                thumbnail={item.poster_path}
-              />
-            );
+        {results &&
+          results.map((item) => {
+            if (item.media_type === "person") {
+              return null;
+            } else {
+              return (
+                <Item
+                  key={item.id}
+                  id={item.id}
+                  title={item.media_type === "tv" ? item.name : item.title}
+                  thumbnail={item.poster_path}
+                  media_type
+                />
+              );
+            }
           })}
       </ItemListBlock>
     </>

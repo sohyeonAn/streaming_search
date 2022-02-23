@@ -8,6 +8,8 @@ const ItemBlock = styled.div`
   align-items: flex-start;
   gap: 0.5rem;
   cursor: pointer;
+  position: relative;
+  width: 100%;
 
   &:hover > .imgContainer::after {
     content: "";
@@ -22,20 +24,31 @@ const ItemBlock = styled.div`
   }
 
   .imgContainer {
+    width: 100%;
     position: relative;
+    padding-top: 135%;
+    overflow: hidden;
+
     img {
-      position: relative;
+      position: absolute;
       border-radius: 5%;
       width: 100%;
-      object-fit: contain;
+      height: 100%;
+      object-fit: fill;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
     }
   }
 
   span {
+    flex: 1;
     font-size: 1.2rem;
   }
 `;
-function Item({ title, thumbnail, id, isMovie }) {
+function Item(info) {
+  const { title, thumbnail, id, media_type } = info;
   const params = {
     api_key: "d277d1f5bbb9f2ba2a5bd7ca9ba09c4d",
     append_to_response: "watch/providers",
@@ -44,7 +57,7 @@ function Item({ title, thumbnail, id, isMovie }) {
 
   const onClick = async () => {
     const response = await axios.get(
-      `https://api.themoviedb.org/3/${isMovie ? "movie" : "tv"}/${id}?`,
+      `https://api.themoviedb.org/3/${media_type}/${id}?`,
       {
         params,
       }
