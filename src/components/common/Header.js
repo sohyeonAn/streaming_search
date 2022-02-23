@@ -5,7 +5,7 @@ const HeaderBlock = styled.div`
   padding: 0;
   position: fixed;
   width: 100%;
-  background-color: peachpuff;
+  background-color: #2471a3;
   z-index: 50;
 `;
 

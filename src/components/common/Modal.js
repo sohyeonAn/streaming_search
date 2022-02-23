@@ -20,7 +20,7 @@ const ModalBlock = styled.div`
   width: 40rem;
   position: relative;
   color: #fff;
-  background: #34495e;
+  background: #154360;
   padding: 1.5rem;
   border-radius: 10px;
   display: flex;
