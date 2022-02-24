@@ -1,7 +1,7 @@
-import usePromise from "../lib/usePromise";
+import usePromise from "../../lib/usePromise";
 import styled from "styled-components";
-import Responsive from "./common/Responsive";
-import { API_PARAMS } from "../constants/API";
+import Responsive from "../common/Responsive";
+import { API_PARAMS } from "../../constants/API";
 import axios from "axios";
 import Item from "./Item";
 

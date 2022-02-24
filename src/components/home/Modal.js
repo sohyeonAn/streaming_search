@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { IMAGE_PATH } from "../../constants/API";
 import { VscChromeClose } from "react-icons/vsc";
-import ImageContainer from "./ImageContainer";
+import ImageContainer from "../common/ImageContainer";
 
 const Fullscreen = styled.div`
   position: fixed;
@@ -56,6 +56,9 @@ const ModalBlock = styled.div`
     }
   }
 
+  @media screen and (max-width: 768px) {
+    width: 70vw;
+  }
   @media screen and (max-width: 430px) {
     padding: 1rem;
     width: 15rem;
@@ -81,6 +84,11 @@ const ImageContainerBlock = styled(ImageContainer)`
   padding-top: 27rem;
   img {
     border-radius: 10px;
+  }
+  @media screen and (max-width: 768px) {
+    width: 12rem;
+    height: 18rem;
+    padding-top: 18rem;
   }
 
   @media screen and (max-width: 430px) {
@@ -131,7 +139,7 @@ const ProviderItemBlock = styled.div`
     text-align: center;
   }
 
-  @media screen and (max-width: 430px) {
+  @media screen and (max-width: 768px) {
     img {
       width: 2rem;
       height: 2rem;

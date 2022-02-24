@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useCallback, useState, useEffect } from "react";
-import Header from "./common/Header";
+import Header from "../common/Header";
 import ItemList from "./ItemList";
 import SearchInsert from "./SearchInsert";
 import { IoIosArrowUp } from "react-icons/io";

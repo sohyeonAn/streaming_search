@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Responsive from "./common/Responsive";
+import Responsive from "../common/Responsive";
 import { FiSearch } from "react-icons/fi";
 import React, { useState, useCallback } from "react";
 

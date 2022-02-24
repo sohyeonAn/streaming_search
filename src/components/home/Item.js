@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
-import Modal from "./common/Modal";
-import { API_PARAMS, IMAGE_PATH } from "../constants/API";
+import Modal from "./Modal";
+import { API_PARAMS, IMAGE_PATH } from "../../constants/API";
 
 const color = {
   tv: "#D5F5E3",
