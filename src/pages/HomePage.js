@@ -1,9 +1,11 @@
-import Home from "../components/home/Home";
+import HeaderContainer from "../containers/common/HeaderContainer";
+import HomeContainer from "../containers/home/HomeContainer";
 
 function HomePage() {
   return (
     <div>
-      <Home />
+      <HeaderContainer />
+      <HomeContainer />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Responsive from "./Responsive";
 
@@ -14,10 +15,18 @@ const Wrapper = styled(Responsive)`
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 
   h1 {
     font-size: 3.5rem;
     color: white;
+  }
+
+  .right {
+    padding: 1rem;
+    position: absolute;
+    bottom: 0;
+    right: 0;
   }
 
   @media screen and (max-width: 430px) {
@@ -37,12 +46,27 @@ const Spacer = styled.div`
   }
 `;
 
-function Header() {
+const UserInfo = styled.div`
+  font-weight: 800;
+  margin-right: 1rem;
+`;
+
+function Header({ user, onLogout }) {
   return (
     <>
       <HeaderBlock>
         <Wrapper>
           <h1>이거 어디서 봐?</h1>
+          {user ? (
+            <div className="right">
+              <UserInfo>{user.username}</UserInfo>
+              <button onclick={onLogout}>로그아웃</button>
+            </div>
+          ) : (
+            <div className="right">
+              <Link to="/login">로그인</Link>
+            </div>
+          )}
         </Wrapper>
       </HeaderBlock>
       <Spacer />

@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import { useCallback, useState, useEffect } from "react";
-import Header from "../common/Header";
 import ItemList from "./ItemList";
 import SearchInsert from "./SearchInsert";
 import { IoIosArrowUp } from "react-icons/io";
@@ -21,36 +19,9 @@ const StyledButton = styled.button`
   }
 `;
 
-function Home() {
-  const [showButton, setShowButton] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
-
-  const onInsert = useCallback((input) => {
-    setSearchInput(input);
-  }, []);
-
-  const scrollToTopHandler = () => {
-    if (window.scrollY > 300) {
-      setShowButton(true);
-    } else {
-      setShowButton(false);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", scrollToTopHandler);
-    return () => window.removeEventListener("scroll", scrollToTopHandler);
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
+function Home({ showButton, searchInput, onInsert, scrollToTop }) {
   return (
     <>
-      <Header />
       <SearchInsert onInsert={onInsert} />
       {searchInput && <ItemList searchInput={searchInput} />}
       {showButton && (
