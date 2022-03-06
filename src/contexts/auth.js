@@ -1,15 +1,17 @@
 import { createContext } from "react";
 import { auth } from "../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 
-export const login_reducer = (state, action) => {
+export const auth_reducer = (state, action) => {
   switch (action.type) {
     case "CHANGE_FIELD": {
       const { form, key, value } = action;
       const preLoginState = state.login;
       const preRegisterState = state.register;
       let newState;
-
       if (form === "login") {
         newState = {
           ...state,
@@ -20,7 +22,7 @@ export const login_reducer = (state, action) => {
         newState = {
           ...state,
           login: { ...preLoginState },
-          register: { ...preRegisterState, key: value },
+          register: { ...preRegisterState, [key]: value },
         };
       }
       return newState;
@@ -41,11 +43,34 @@ export const login_reducer = (state, action) => {
           return { ...state, authError: null, auth: user };
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error.code);
+          console.log(error.message);
           return { ...state, authError: error.massage, auth: null };
         });
 
       return state;
+    }
+    case "REGISTER": {
+      const { email, password, passwordConfirm } = action;
+      if (password !== passwordConfirm) {
+        return {
+          ...state,
+          authError: "비밀번호 확인을 다시 입력해주세요.",
+          auth: null,
+        };
+      }
+      let newState;
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          newState = { ...state, authError: null, auth: user };
+        })
+        .catch((error) => {
+          console.log(error.code);
+          newState = { ...state, authError: error, auth: null };
+        });
+      return newState;
     }
     default:
       return state;
@@ -66,7 +91,7 @@ const initialState = {
   authError: null,
 };
 
-export const LoginContext = createContext(initialState);
+export const AuthContext = createContext(initialState);
 
 // const LoginProvider = ({ children }) => {
 //   const [login, setLogin] = useState({ email: "", password: "" });

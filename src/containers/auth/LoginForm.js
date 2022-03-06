@@ -1,7 +1,7 @@
-import { useState, useContext, useReducer, useEffect } from "react";
+import { useState, useReducer, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthForm from "../../components/auth/AuthForm";
-import { login_reducer, LoginContext } from "../../contexts/auth";
+import { auth_reducer, AuthContext } from "../../contexts/auth";
 const initialState = {
   register: {
     email: "",
@@ -16,7 +16,7 @@ const initialState = {
   authError: null,
 };
 function LoginForm() {
-  const [state, dispatch] = useReducer(login_reducer, initialState);
+  const [state, dispatch] = useReducer(auth_reducer, initialState);
   const [error, setError] = useState(null);
   // const navigate = useNavigate();
 
@@ -43,16 +43,16 @@ function LoginForm() {
   useEffect(() => {
     dispatch({
       type: "RESET",
+      form: "login",
     });
   }, [dispatch]);
 
   useEffect(() => {
     if (state.authError) {
-      console.log("오류 발생");
-      console.log(state.authError);
-      setError("로그인 실패");
+      setError(state.authError);
       dispatch({
         type: "RESET",
+        form: "login",
       });
       return;
     }
@@ -76,7 +76,7 @@ function LoginForm() {
   //   }
   // }, [user, navigate])
   return (
-    <LoginContext.Provider value={dispatch}>
+    <AuthContext.Provider value={dispatch}>
       <AuthForm
         type="login"
         form={state.login}
@@ -84,7 +84,7 @@ function LoginForm() {
         onSubmit={onSubmit}
         error={error}
       />
-    </LoginContext.Provider>
+    </AuthContext.Provider>
   );
 }
 
