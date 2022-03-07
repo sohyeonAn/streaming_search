@@ -1,28 +1,16 @@
-import { useState, useReducer, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthForm from "../../components/auth/AuthForm";
-import { auth_reducer, AuthContext } from "../../contexts/auth";
-const initialState = {
-  register: {
-    email: "",
-    password: "",
-    passwordConfirm: "",
-  },
-  login: {
-    email: "",
-    password: "",
-  },
-  auth: null,
-  authError: null,
-};
+import { AuthContext } from "../../App";
+
 function LoginForm() {
-  const [state, dispatch] = useReducer(auth_reducer, initialState);
+  const authContext = useContext(AuthContext);
   const [error, setError] = useState(null);
   // const navigate = useNavigate();
 
   const onChange = (e) => {
     const { value, name } = e.target;
-    dispatch({
+    authContext.authDispatch({
       type: "CHANGE_FIELD",
       form: "login",
       key: name,
@@ -32,8 +20,8 @@ function LoginForm() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const { email, password } = state.login;
-    dispatch({
+    const { email, password } = authContext.authState.login;
+    authContext.authDispatch({
       type: "LOGIN",
       email,
       password,
@@ -41,29 +29,33 @@ function LoginForm() {
   };
 
   useEffect(() => {
-    dispatch({
+    authContext.authDispatch({
       type: "RESET",
       form: "login",
     });
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
-    if (state.authError) {
-      setError(state.authError);
-      dispatch({
+    if (authContext.authState.authError) {
+      setError(authContext.authState.authError);
+      authContext.authDispatch({
         type: "RESET",
         form: "login",
       });
       return;
     }
 
-    if (state.auth) {
+    if (authContext.authState.auth) {
       console.log("로그인 성공");
-      dispatch({
+      authContext.authDispatch({
         type: "CHECK",
       });
     }
-  }, [state.auth, state.authError, dispatch]);
+  }, [
+    authContext.authState.authError,
+    authContext.authState.auth,
+    authContext.authDispatch,
+  ]);
 
   // useEffect(()=>{
   //   if(user){
@@ -76,15 +68,13 @@ function LoginForm() {
   //   }
   // }, [user, navigate])
   return (
-    <AuthContext.Provider value={dispatch}>
-      <AuthForm
-        type="login"
-        form={state.login}
-        onChange={onChange}
-        onSubmit={onSubmit}
-        error={error}
-      />
-    </AuthContext.Provider>
+    <AuthForm
+      type="login"
+      form={authContext.authState.login}
+      onChange={onChange}
+      onSubmit={onSubmit}
+      error={error}
+    />
   );
 }
 

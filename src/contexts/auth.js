@@ -1,4 +1,3 @@
-import { createContext } from "react";
 import { auth } from "../firebase";
 import {
   signInWithEmailAndPassword,
@@ -50,34 +49,20 @@ export const auth_reducer = (state, action) => {
 
       return state;
     }
-    case "REGISTER": {
-      const { email, password, passwordConfirm } = action;
-      if (password !== passwordConfirm) {
-        return {
-          ...state,
-          authError: "비밀번호 확인을 다시 입력해주세요.",
-          auth: null,
-        };
-      }
-      let newState;
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          // Signed in
-          const user = userCredential.user;
-          newState = { ...state, authError: null, auth: user };
-        })
-        .catch((error) => {
-          console.log(error.code);
-          newState = { ...state, authError: error, auth: null };
-        });
-      return newState;
+    case "SET_USER": {
+      const { user, authError } = action;
+      return { ...state, auth: null, authError, user };
+    }
+    case "SET_ERROR": {
+      const { authError } = action;
+      return { ...state, authError };
     }
     default:
       return state;
   }
 };
 
-const initialState = {
+export const initialState = {
   register: {
     email: "",
     password: "",
@@ -91,31 +76,22 @@ const initialState = {
   authError: null,
 };
 
-export const AuthContext = createContext(initialState);
-
-// const LoginProvider = ({ children }) => {
-//   const [login, setLogin] = useState({ email: "", password: "" });
-//   const [error, setError] = useState("");
-
-//   const onChange = (key, value) => {
-//     setLogin({ ...login, [key]: value });
-//   };
-
-//   const reset = () => {
-//     setLogin({ email: "", password: "" });
-//   };
-
-//   const login = {
-//     state: { email, password },
-//     actions: { setEmail, setPassword },
-//   };
-
-//   return (
-//     <LoginContext.Provider login={login}>{children}</LoginContext.Provider>
-//   );
-// };
-
-// // const {Consumner: LoginConsumer} = LoginContext;
-// const LoginConsumer = LoginContext.Consumer;
-
-// export { LoginConsumer, LoginProvider, LoginContext };
+const register = async (email, password) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+    return {
+      authError: null,
+      auth: user,
+    };
+  } catch (error) {
+    return {
+      authError: error.message,
+      auth: null,
+    };
+  }
+};
