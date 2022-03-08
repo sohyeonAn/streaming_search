@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import Modal from "./Modal";
 import { API_PARAMS, IMAGE_PATH } from "../../constants/API";
+import { useStateValue } from "../../contexts/StateProvider";
 
 const color = {
   tv: "#D5F5E3",
@@ -69,6 +70,7 @@ const ItemBlock = styled.div`
   }
 `;
 function Item(info) {
+  const [{}, dispatch] = useStateValue();
   const { title, thumbnail, id, media_type } = info;
   const [modal, setModal] = useState(false);
   const [providers, setProviders] = useState({});
@@ -96,14 +98,25 @@ function Item(info) {
       setProviders(newProviders);
       const newNetworks = response.data.networks;
       setNetworks(newNetworks);
-
-      console.log("스트리밍", response.data["watch/providers"].results.KR);
-      console.log("방송사", response.data.networks);
     } catch (e) {
       console.log(e);
     }
   };
 
+  const addToBasket = () => {
+    dispatch({
+      type: "ADD_TO_BASKET",
+      payload: { ...info, ...providers },
+    });
+  };
+
+  const removeFromBasket = () => {
+    dispatch({
+      type: "REMOVE_FROM_BASKET",
+      id,
+      media_type,
+    });
+  };
   const onCancel = () => {
     setModal(false);
   };
@@ -124,6 +137,8 @@ function Item(info) {
         </div>
       </ItemBlock>
       <Modal
+        id={id}
+        media_type={media_type}
         visible={modal}
         title={title}
         buy={providers?.hasOwnProperty("buy") ? providers.buy : null}
@@ -132,6 +147,8 @@ function Item(info) {
         }
         rent={providers?.hasOwnProperty("rent") ? providers.rent : null}
         networks={networks}
+        removeFromBasket={removeFromBasket}
+        addToBasket={addToBasket}
         onCancel={onCancel}
         thumbnail={thumbnail}
       />

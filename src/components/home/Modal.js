@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { IMAGE_PATH } from "../../constants/API";
 import { VscChromeClose } from "react-icons/vsc";
+import { IoBagAdd, IoBagRemove } from "react-icons/io5";
 import ImageContainer from "../common/ImageContainer";
+import { useStateValue } from "../../contexts/StateProvider";
 
 const Fullscreen = styled.div`
   position: fixed;
@@ -26,21 +28,6 @@ const ModalBlock = styled.div`
   display: flex;
   gap: 3rem;
 
-  button {
-    border: none;
-    outline: none;
-    background-color: transparent;
-    font-size: 2rem;
-    color: white;
-    position: absolute;
-    top: -2.5rem;
-    right: 0.5rem;
-    cursor: pointer;
-
-    &:hover {
-      color: gray;
-    }
-  }
   .info {
     flex: 1;
     padding: 1rem 0 0;
@@ -75,6 +62,24 @@ const ModalBlock = styled.div`
       .network_name {
         font-size: 0.8rem;
       }
+    }
+  }
+`;
+
+const ButtonsBlock = styled.div`
+  display: flex;
+  position: absolute;
+  top: -2.5rem;
+  right: 0.5rem;
+  gap: 0.5rem;
+
+  button {
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+      color: #533e85;
     }
   }
 `;
@@ -148,16 +153,22 @@ const ProviderItemBlock = styled.div`
 `;
 
 const Modal = ({
+  id,
+  media_type,
   visible,
   title,
   buy,
   rent,
   flatrate,
   networks,
+  addToBasket,
+  removeFromBasket,
   onCancel,
   thumbnail,
 }) => {
+  const [{ basket }, dispatch] = useStateValue();
   if (!visible) return null;
+
   return (
     <Fullscreen onClick={onCancel}>
       <ModalBlock>
@@ -202,9 +213,22 @@ const Modal = ({
             );
           })}
         </section>
-        <button type="button" onClick={onCancel}>
-          <VscChromeClose />
-        </button>
+        <ButtonsBlock>
+          {basket.find(
+            (item) => item.media_type === media_type && item.id === id
+          ) ? (
+            <button type="button" onClick={removeFromBasket}>
+              <IoBagRemove />
+            </button>
+          ) : (
+            <button type="button" onClick={addToBasket}>
+              <IoBagAdd />
+            </button>
+          )}
+          <button type="button" onClick={onCancel}>
+            <VscChromeClose />
+          </button>
+        </ButtonsBlock>
       </ModalBlock>
     </Fullscreen>
   );
