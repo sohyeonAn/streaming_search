@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Responsive from "./Responsive";
+import { IoBasket } from "react-icons/io5";
 
 const HeaderBlock = styled.div`
   padding: 0;
@@ -23,10 +24,23 @@ const Wrapper = styled(Responsive)`
   }
 
   .right {
-    padding: 1rem;
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: 1rem;
+    right: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+
+    .userInfo {
+      font-weight: 700;
+    }
+
+    .basket {
+      display: flex;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
   }
 
   @media screen and (max-width: 430px) {
@@ -46,12 +60,6 @@ const Spacer = styled.div`
   }
 `;
 
-const UserInfo = styled.div`
-  font-weight: 700;
-  display: inline-block;
-  margin-right: 1rem;
-`;
-
 function Header({ user, onLogout }) {
   return (
     <>
@@ -60,7 +68,10 @@ function Header({ user, onLogout }) {
           <h1>이거 어디서 봐?</h1>
           {user ? (
             <div className="right">
-              <UserInfo>{user.email}</UserInfo>
+              <span className="userInfo">{user.email}</span>
+              <Link className="basket" to="/basket">
+                <IoBasket />
+              </Link>
               <button onClick={onLogout}>로그아웃</button>
             </div>
           ) : (

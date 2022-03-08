@@ -6,6 +6,7 @@ import RegisterPage from "./pages/RegisterPage";
 import { Routes, Route } from "react-router-dom";
 import { useStateValue } from "./contexts/StateProvider";
 import { useEffect } from "react";
+import BasketPage from "./pages/BasketPage";
 
 function App() {
   const [{}, dispatch] = useStateValue();
@@ -31,6 +32,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/basket" element={<BasketPage />} />
       </Routes>
     </div>
   );
