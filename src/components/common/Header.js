@@ -47,7 +47,8 @@ const Spacer = styled.div`
 `;
 
 const UserInfo = styled.div`
-  font-weight: 800;
+  font-weight: 700;
+  display: inline-block;
   margin-right: 1rem;
 `;
 
@@ -59,7 +60,7 @@ function Header({ user, onLogout }) {
           <h1>이거 어디서 봐?</h1>
           {user ? (
             <div className="right">
-              <UserInfo>{user.username}</UserInfo>
+              <UserInfo>{user.email}</UserInfo>
               <button onClick={onLogout}>로그아웃</button>
             </div>
           ) : (
