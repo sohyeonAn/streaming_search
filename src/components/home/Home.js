@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import ItemList from "./ItemList";
-import SearchInsert from "./SearchInsert";
+import SearchInput from "./SearchInput";
 import { IoIosArrowUp } from "react-icons/io";
 
 const StyledButton = styled.button`
@@ -22,7 +22,7 @@ const StyledButton = styled.button`
 function Home({ showButton, searchInput, onInsert, scrollToTop }) {
   return (
     <>
-      <SearchInsert onInsert={onInsert} />
+      <SearchInput onInsert={onInsert} />
       {searchInput && <ItemList searchInput={searchInput} />}
       {showButton && (
         <StyledButton type="button" onClick={scrollToTop}>
