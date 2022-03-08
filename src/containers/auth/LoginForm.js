@@ -1,76 +1,67 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthForm from "../../components/auth/AuthForm";
-import { AuthContext } from "../../App";
+import { auth } from "../../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "CHANGE_FIELD":
+      return { ...state, [action.key]: action.value };
+
+    case "RESET":
+      return { email: "", password: "" };
+    default:
+      return state;
+  }
+};
 
 function LoginForm() {
-  const authContext = useContext(AuthContext);
+  const [inputs, inputDispatch] = useReducer(reducer, {
+    email: "",
+    password: "",
+  });
   const [error, setError] = useState(null);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const onChange = (e) => {
     const { value, name } = e.target;
-    authContext.authDispatch({
-      type: "CHANGE_FIELD",
-      form: "login",
-      key: name,
-      value,
-    });
+    inputDispatch({ type: "CHANGE_FIELD", key: name, value });
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const { email, password } = authContext.authState.login;
-    authContext.authDispatch({
-      type: "LOGIN",
-      email,
-      password,
-    });
+    const { email, password } = inputs;
+
+    if (email === "") {
+      setError("이메일을 입력해주세요.");
+      return;
+    }
+    if (password === "") {
+      setError("비밀번호를 입력해주세요.");
+      return;
+    }
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        navigate("/");
+      })
+      .catch((error) => {
+        inputDispatch({ type: "RESET" });
+        setError("이메일 또는 비밀번호가 일치하지 않습니다.");
+      });
   };
 
   useEffect(() => {
-    authContext.authDispatch({
+    inputDispatch({
       type: "RESET",
-      form: "login",
     });
   }, []);
 
-  useEffect(() => {
-    if (authContext.authState.authError) {
-      setError(authContext.authState.authError);
-      authContext.authDispatch({
-        type: "RESET",
-        form: "login",
-      });
-      return;
-    }
-
-    if (authContext.authState.auth) {
-      console.log("로그인 성공");
-      authContext.authDispatch({
-        type: "CHECK",
-      });
-    }
-  }, [
-    authContext.authState.authError,
-    authContext.authState.auth,
-    authContext.authDispatch,
-  ]);
-
-  // useEffect(()=>{
-  //   if(user){
-  //     navigate('/');
-  //     try{
-  //       localStorage.setItem('user', JSON.stringify(user));
-  //     }catch(e){
-  //       console.log('localStorage is not working');
-  //     }
-  //   }
-  // }, [user, navigate])
   return (
     <AuthForm
       type="login"
-      form={authContext.authState.login}
+      form={inputs}
       onChange={onChange}
       onSubmit={onSubmit}
       error={error}

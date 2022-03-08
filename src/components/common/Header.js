@@ -60,7 +60,7 @@ function Header({ user, onLogout }) {
           {user ? (
             <div className="right">
               <UserInfo>{user.username}</UserInfo>
-              <button onclick={onLogout}>로그아웃</button>
+              <button onClick={onLogout}>로그아웃</button>
             </div>
           ) : (
             <div className="right">

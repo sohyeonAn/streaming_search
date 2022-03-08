@@ -1,76 +1,79 @@
-import { useEffect, useContext, useState } from "react";
-import { AuthContext } from "../../App";
+import { useEffect, useState, useReducer } from "react";
 import AuthForm from "../../components/auth/AuthForm";
 import { auth } from "../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "CHANGE_FIELD":
+      return { ...state, [action.key]: action.value };
+    case "RESET":
+      return { email: "", password: "", passwordConfirm: "" };
+    default:
+      return state;
+  }
+};
+
 function RegisterForm() {
-  const authContext = useContext(AuthContext);
+  const [inputs, inputDispatch] = useReducer(reducer, {
+    email: "",
+    password: "",
+    passwordConfirm: "",
+  });
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const onChange = (e) => {
     const { value, name } = e.target;
-    authContext.authDispatch({
-      type: "CHANGE_FIELD",
-      form: "register",
-      key: name,
-      value,
-    });
+    inputDispatch({ type: "CHANGE_FIELD", key: name, value });
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const { email, password, passwordConfirm } = authContext.authState.register;
+    const { email, password, passwordConfirm } = inputs;
+    if (email === "") {
+      setError("이메일을 입력해주세요.");
+      return;
+    }
+
+    if (password === "") {
+      setError("비밀번호를 입력해주세요.");
+      return;
+    }
+
+    if (passwordConfirm === "") {
+      setError("비밀번호 확인을 입력해주세요.");
+      return;
+    }
+
     if (password !== passwordConfirm) {
-      setError("비밀번호 확인을 다시 입력해주세요.");
+      setError("비밀번호 확인이 비밀번호와 일치하지 않습니다.");
       return;
     }
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        authContext.authDispatch({
-          type: "SET_USER",
-          user,
-        });
+        console.log(user);
+        navigate("/");
       })
       .catch((error) => {
-        authContext.authDispatch({
-          type: "SET_ERROR",
-          authError: error.message,
-        });
+        inputDispatch({ type: "RESET" });
+        setError(error.message);
       });
   };
 
   useEffect(() => {
-    authContext.authDispatch({
+    inputDispatch({
       type: "RESET",
-      form: "register",
     });
   }, []);
 
-  useEffect(() => {
-    console.log("갱신");
-    console.log(authContext.authState.authError);
-    if (authContext.authState.authError) {
-      setError(authContext.authState.authError);
-      // authContext.authDispatch({
-      //   type: "RESET",
-      //   form: "register",
-      // });
-      return;
-    }
-
-    if (authContext.authState.auth) {
-      console.log("회원가입 성공");
-      authContext.authDispatch({
-        type: "CHECK",
-      });
-    }
-  }, [authContext]);
   return (
     <AuthForm
       type="register"
-      form={authContext.authState.register}
+      form={inputs}
       onChange={onChange}
       onSubmit={onSubmit}
       error={error}
