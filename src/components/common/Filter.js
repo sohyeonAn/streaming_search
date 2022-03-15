@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { BiDownArrow, BiUpArrow } from "react-icons/bi";
-import { useState } from "react";
+import React, { useState } from "react";
 
 const SelectBlock = styled.div`
   position: relative;
@@ -47,11 +47,10 @@ const SelectBlock = styled.div`
   }
 `;
 
-function Filter({ selectTitle, selectList }) {
+function Filter({ selectTitle, selectList, selectedItem, dispatch }) {
   const [showList, setShowList] = useState(false);
-  const [selectedItem, setSelectedItem] = useState("");
   const itemClickHandler = (e) => {
-    setSelectedItem(e.target.textContent);
+    dispatch({ name: selectTitle, value: e.target.textContent });
     setShowList(false);
   };
   return (
@@ -59,18 +58,15 @@ function Filter({ selectTitle, selectList }) {
       <span className="label">{selectTitle}</span>
       <div className="input" onClick={() => setShowList(!showList)}>
         <button type="button">
-          <span>{selectedItem ? selectedItem : "선택하세요."}</span>
+          <span>{selectedItem}</span>
           {showList ? <BiUpArrow /> : <BiDownArrow />}
         </button>
       </div>
       {showList && (
         <ul className="list">
+          <li onClick={itemClickHandler}>전체</li>
           {selectList.map((item) => (
-            <li
-              key={`select-${item}`}
-              data-name={item}
-              onClick={itemClickHandler}
-            >
+            <li key={`select-${item}`} onClick={itemClickHandler}>
               {item}
             </li>
           ))}
@@ -80,4 +76,4 @@ function Filter({ selectTitle, selectList }) {
   );
 }
 
-export default Filter;
+export default React.memo(Filter);
