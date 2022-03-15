@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Responsive from "../common/Responsive";
-import { API_PARAMS } from "../../constants/API";
+import { API_PARAMS } from "../../constants";
 import axios from "axios";
 import Item from "./Item";
 import React, { useState, useEffect, useRef } from "react";

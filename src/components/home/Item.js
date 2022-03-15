@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
 import Modal from "./Modal";
-import { API_PARAMS, IMAGE_PATH } from "../../constants/API";
+import { API_PARAMS, IMAGE_PATH } from "../../constants";
 import { useStateValue } from "../../contexts/StateProvider";
 
 const color = {

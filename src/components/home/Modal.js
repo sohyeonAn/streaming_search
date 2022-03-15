@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { IMAGE_PATH } from "../../constants/API";
+import { IMAGE_PATH } from "../../constants";
 import { VscChromeClose } from "react-icons/vsc";
 import { IoBagAdd, IoBagRemove } from "react-icons/io5";
 import ImageContainer from "../common/ImageContainer";
