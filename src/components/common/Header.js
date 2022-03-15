@@ -65,7 +65,9 @@ function Header({ user, onLogout }) {
     <>
       <HeaderBlock>
         <Wrapper>
-          <h1>이거 어디서 봐?</h1>
+          <Link to="/">
+            <h1>이거 어디서 봐?</h1>
+          </Link>
           {user ? (
             <div className="right">
               <span className="userInfo">{user.email}</span>
