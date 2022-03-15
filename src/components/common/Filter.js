@@ -5,6 +5,7 @@ import React, { useState } from "react";
 const SelectBlock = styled.div`
   position: relative;
   width: 20%;
+  min-width: 100px;
 
   .label {
     margin-left: 0.5rem;
@@ -36,6 +37,7 @@ const SelectBlock = styled.div`
     border: 1px solid black;
     border-radius: 10px;
     text-align: center;
+    background-color: white;
 
     li {
       margin: 0.3rem 0.5rem;
