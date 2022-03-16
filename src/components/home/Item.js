@@ -71,7 +71,7 @@ const ItemBlock = styled.div`
 `;
 function Item({ itemInfo }) {
   const [{}, dispatch] = useStateValue();
-  const { title, poster_path, id, media_type } = itemInfo;
+  const { title, name, poster_path, id, media_type } = itemInfo;
   const [modal, setModal] = useState(false);
   const [providers, setProviders] = useState({});
   const [networks, setNetworks] = useState([]);
@@ -133,14 +133,14 @@ function Item({ itemInfo }) {
         </div>
         <div className="info_txt">
           <span className="media_type">{media_type}</span>
-          <span className="title">{title}</span>
+          <span className="title">{media_type === "tv" ? name : title}</span>
         </div>
       </ItemBlock>
       <Modal
         id={id}
         media_type={media_type}
         visible={modal}
-        title={title}
+        title={media_type === "tv" ? name : title}
         buy={providers?.hasOwnProperty("buy") ? providers.buy : null}
         flatrate={
           providers?.hasOwnProperty("flatrate") ? providers.flatrate : null
