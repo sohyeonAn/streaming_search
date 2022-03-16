@@ -169,9 +169,8 @@ const Modal = ({
   onCancel,
   thumbnail,
 }) => {
-  const [{ basket }, dispatch] = useStateValue();
+  const [{ basket, user }, _] = useStateValue();
   if (!visible) return null;
-
   return (
     <Fullscreen onClick={onCancel}>
       <ModalBlock>
@@ -217,17 +216,18 @@ const Modal = ({
           })}
         </section>
         <ButtonsBlock>
-          {basket.find(
-            (item) => item.media_type === media_type && item.id === id
-          ) ? (
-            <button type="button" onClick={removeFromBasket}>
-              <BsFillBookmarkDashFill />
-            </button>
-          ) : (
-            <button type="button" onClick={addToBasket}>
-              <BsFillBookmarkCheckFill />
-            </button>
-          )}
+          {user &&
+            (basket.find(
+              (item) => item.media_type === media_type && item.id === id
+            ) ? (
+              <button type="button" onClick={removeFromBasket}>
+                <BsFillBookmarkDashFill />
+              </button>
+            ) : (
+              <button type="button" onClick={addToBasket}>
+                <BsFillBookmarkCheckFill />
+              </button>
+            ))}
           <button type="button" onClick={onCancel}>
             <VscChromeClose />
           </button>
