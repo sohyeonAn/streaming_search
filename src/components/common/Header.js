@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Responsive from "./Responsive";
-import { IoBasket } from "react-icons/io5";
+import { BsFillBookmarkHeartFill } from "react-icons/bs";
 
 const HeaderBlock = styled.div`
   padding: 0;
@@ -72,7 +72,7 @@ function Header({ user, onLogout }) {
             <div className="right">
               <span className="userInfo">{user.email}</span>
               <Link className="basket" to="/basket">
-                <IoBasket />
+                <BsFillBookmarkHeartFill />
               </Link>
               <button onClick={onLogout}>로그아웃</button>
             </div>

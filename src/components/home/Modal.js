@@ -1,7 +1,10 @@
 import styled from "styled-components";
 import { IMAGE_PATH } from "../../constants";
 import { VscChromeClose } from "react-icons/vsc";
-import { IoBagAdd, IoBagRemove } from "react-icons/io5";
+import {
+  BsFillBookmarkCheckFill,
+  BsFillBookmarkDashFill,
+} from "react-icons/bs";
 import ImageContainer from "../common/ImageContainer";
 import { useStateValue } from "../../contexts/StateProvider";
 
@@ -218,11 +221,11 @@ const Modal = ({
             (item) => item.media_type === media_type && item.id === id
           ) ? (
             <button type="button" onClick={removeFromBasket}>
-              <IoBagRemove />
+              <BsFillBookmarkDashFill />
             </button>
           ) : (
             <button type="button" onClick={addToBasket}>
-              <IoBagAdd />
+              <BsFillBookmarkCheckFill />
             </button>
           )}
           <button type="button" onClick={onCancel}>
