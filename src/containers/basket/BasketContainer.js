@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useReducer } from "react";
 import styled from "styled-components";
+import BasketList from "../../components/basket/BasketList";
 import Filter from "../../components/common/Filter";
 import Responsive from "../../components/common/Responsive";
 import {
@@ -117,17 +118,7 @@ function BasketContainer() {
           </button>
         </FilterBlock>
       </BasketBlock>
-      <div>
-        {basketList.length > 0
-          ? basketList.map((item) => {
-              return (
-                <p key={`basket-${item.id}`}>
-                  {item.id}-{item.title}
-                </p>
-              );
-            })
-          : "검색 결과에 해당하는 항목이 없습니다. 😥"}
-      </div>
+      <BasketList items={basketList} />
     </Responsive>
   );
 }
