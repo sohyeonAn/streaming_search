@@ -38,7 +38,7 @@ const SelectBlock = styled.div`
     border-radius: 10px;
     text-align: center;
     background-color: white;
-
+    z-index: 50;
     li {
       margin: 0.3rem 0.5rem;
 
