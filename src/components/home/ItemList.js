@@ -95,15 +95,7 @@ function ItemList({ searchInput }) {
           if (item.media_type === "person") {
             return null;
           }
-          return (
-            <Item
-              key={`${item.media_type}-${item.id}`}
-              id={item.id}
-              title={item.media_type === "tv" ? item.name : item.title}
-              thumbnail={item.poster_path}
-              media_type={item.media_type}
-            />
-          );
+          return <Item key={`${item.media_type}-${item.id}`} itemInfo={item} />;
         })}
       </ItemListBlock>
       {!hasMore && <div>모든 정보를 읽어왔습니다.</div>}

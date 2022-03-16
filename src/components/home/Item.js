@@ -69,9 +69,9 @@ const ItemBlock = styled.div`
     }
   }
 `;
-function Item(info) {
+function Item({ itemInfo }) {
   const [{}, dispatch] = useStateValue();
-  const { title, thumbnail, id, media_type } = info;
+  const { title, poster_path, id, media_type } = itemInfo;
   const [modal, setModal] = useState(false);
   const [providers, setProviders] = useState({});
   const [networks, setNetworks] = useState([]);
@@ -106,7 +106,7 @@ function Item(info) {
   const addToBasket = () => {
     dispatch({
       type: "ADD_TO_BASKET",
-      payload: { ...info, ...providers },
+      payload: { ...itemInfo, ...providers },
     });
   };
 
@@ -127,8 +127,8 @@ function Item(info) {
         color={media_type === "tv" ? color.tv : color.movie}
       >
         <div className="imgContainer">
-          {thumbnail && (
-            <img src={`${IMAGE_PATH}/${thumbnail}`} alt="포스터사진" />
+          {poster_path && (
+            <img src={`${IMAGE_PATH}/${poster_path}`} alt="포스터사진" />
           )}
         </div>
         <div className="info_txt">
@@ -150,7 +150,7 @@ function Item(info) {
         removeFromBasket={removeFromBasket}
         addToBasket={addToBasket}
         onCancel={onCancel}
-        thumbnail={thumbnail}
+        thumbnail={poster_path}
       />
     </>
   );
