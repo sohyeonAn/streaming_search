@@ -53,8 +53,6 @@ function ItemList({ searchInput }) {
   }, [searchInput]);
 
   const loadData = async () => {
-    console.log("loadData() called");
-
     setIsLoading(true);
     try {
       const response = await axios.get(
@@ -84,9 +82,6 @@ function ItemList({ searchInput }) {
   if (error) {
     return <div>에러 발생! {error.message}</div>;
   }
-  if (isLoading) {
-    return <div>불러 오는 중...</div>;
-  }
 
   return (
     <>
@@ -98,6 +93,7 @@ function ItemList({ searchInput }) {
           return <Item key={`${item.media_type}-${item.id}`} itemInfo={item} />;
         })}
       </ItemListBlock>
+      {isLoading && <div>불러 오는 중...</div>}
       {!hasMore && <div>모든 정보를 읽어왔습니다.</div>}
     </>
   );
